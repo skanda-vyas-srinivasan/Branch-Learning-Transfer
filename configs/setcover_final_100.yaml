@@ -1,0 +1,33 @@
+seed: 0
+reference_size: 100
+n_per_class: 100
+time_limit: 60
+node_limit: 10000
+results_dir: results/final_100
+model_path: models/baseline_setcover/train_params.pkl
+learn2branch_dir: external/learn2branch
+instances:
+  root: data/instances
+  reference_setcover: reference_setcover
+  eval_classes:
+    setcover_valid: eval_setcover
+    cauctions: eval_cauctions
+    facilities: eval_facilities
+    indset: eval_indset
+generation:
+  setcover:
+    nrows: 500
+    ncols: 1000
+    density: 0.05
+    max_coef: 100
+  cauctions:
+    n_items: 100
+    n_bids: 500
+    add_item_prob: 0.7
+  facilities:
+    n_customers: 100
+    n_facilities: 100
+    ratio: 5
+  indset:
+    n_nodes: 500
+    affinity: 4

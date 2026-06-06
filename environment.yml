@@ -1,0 +1,16 @@
+name: ecole
+channels:
+  - conda-forge
+dependencies:
+  - python=3.11
+  - pip
+  - ecole
+  - pyscipopt
+  - numpy
+  - pandas
+  - scipy
+  - matplotlib
+  - pyyaml
+  - pip:
+      - torch
+      - torch-geometric

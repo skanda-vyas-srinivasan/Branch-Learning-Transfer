@@ -1,0 +1,21 @@
+# Python
+__pycache__/
+*.py[cod]
+.ipynb_checkpoints/
+.pytest_cache/
+
+# OS/editor
+.DS_Store
+.vscode/
+.idea/
+
+# Generated experiment artifacts
+data/instances/
+results/*
+!results/.gitkeep
+!data/.gitkeep
+
+# External clones and local scratch
+external/
+*.tmp
+*.pkl.tmp
