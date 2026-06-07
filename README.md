@@ -2,8 +2,7 @@
 
 Clean runner repo for the branch-learning transfer experiment. It generates MILP instances, evaluates a fixed set-cover-trained Learn2Branch-style policy, computes Maudet-Danoy-style distances to the set-cover reference set, and saves the resulting plots/tables.
 
-For the motivation, figures, and discussion, read the accompanying write-up: **An Exploratory Look at Branch Learning Transfer**.
-
+For the motivation, figures, and discussion, read the accompanying write-up: ![An Exploratory Look at Maudet-Danoy Distances and Learned Branching Transfer](https://skandavyas.com/entries/learned-branching-transfer.html)
 ## Setup
 
 ```bash
