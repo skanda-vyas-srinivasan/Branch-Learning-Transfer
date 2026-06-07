@@ -1,74 +1,82 @@
 # Branch Learning Transfer
 
-This repository is a clean, reproducible runner for testing whether a Maudet-style MILP structural distance is related to transfer behavior of a learned branching policy.
+Clean runner repo for the branch-learning transfer experiment. It generates MILP instances, evaluates a fixed set-cover-trained Learn2Branch-style policy, computes Maudet-Danoy-style distances to the set-cover reference set, and saves the resulting plots/tables.
 
-The included model is a Learn2Branch-style GNN trained on set-cover instances with 500 rows, 1000 columns, and density 0.05. The experiment compares vanilla SCIP branching with the fixed learned policy on unseen set-cover, combinatorial auction, facility-location, and independent-set instances.
+For the motivation, figures, and discussion, read the accompanying write-up: **An Exploratory Look at Branch Learning Transfer**.
 
-## What Is Included
-
-```text
-configs/                  Experiment settings
-models/baseline_setcover/  Trained set-cover policy weights and log
-scripts/                  Instance generation, evaluation, plotting, summaries
-src/branching_eval/        Learn2Branch policy loader and SCIP evaluation
-src/milp_distance/         Maudet-style greedy distance implementation
-results/.gitkeep           Output directory placeholder; generated results are ignored
-data/.gitkeep              Data placeholder; generated instances are ignored
-```
-
-Generated MILP instances and results are intentionally not committed. Run the scripts below to recreate them.
-
-## Environment
+## Setup
 
 ```bash
 conda env create -f environment.yml
 conda activate ecole
 ```
 
-Expected core versions are Ecole 0.8.x, PySCIPOpt, PyTorch, Torch Geometric, NumPy, Pandas, SciPy, and Matplotlib.
-
-## Generate Instances
-
-The generator uses the public Learn2Branch instance generator. Clone it once:
+Clone the upstream Learn2Branch generator:
 
 ```bash
 mkdir -p external
 git clone https://github.com/ds4dm/learn2branch.git external/learn2branch
 ```
 
-Then generate the experiment instances:
+## Run
+
+Generate instances:
 
 ```bash
 python scripts/generate_instances.py --config configs/setcover_final_100.yaml
 ```
 
-This creates:
-
-```text
-data/instances/reference_setcover
-data/instances/eval_setcover
-data/instances/eval_cauctions
-data/instances/eval_facilities
-data/instances/eval_indset
-```
-
-## Run Evaluation
+Evaluate SCIP vs the learned branching policy:
 
 ```bash
 python scripts/run_experiment.py --config configs/setcover_final_100.yaml
 ```
 
-Results are written to `results/final_100/raw_results.csv`
-
-## Make Plots And Tables
+Make plots and summary CSVs:
 
 ```bash
 python scripts/make_plots.py --config configs/setcover_final_100.yaml
 python scripts/summarize_results.py --config configs/setcover_final_100.yaml
 ```
 
-The plotting script writes CSV summaries and PNG figures into the configured results directory. These outputs are ignored by Git so the repository stays clean.
+## Outputs
 
-## Distance Implementation Note
+Generated data and results are ignored by Git. After running the pipeline, outputs are written to:
 
-`src/milp_distance/distance.py` implements a Maudet-style greedy structural distance. It follows the normalized representation and greedy matching construction described by Maudet and Danoy, but it is not an exact optimal-transport solver. The distance from a test instance to the training distribution is computed as the mean pairwise greedy distance to a reference set of set-cover instances.
+```text
+data/instances/
+results/final_100/
+```
+
+Important result files:
+
+```text
+results/final_100/raw_results.csv
+results/final_100/summary_by_class.csv
+results/final_100/correlation_summary.csv
+results/final_100/scatter_distance_rnc_log.png
+results/final_100/box_rnc_by_class.png
+```
+
+## Included Model
+
+The repo already includes the set-cover-trained policy:
+
+```text
+models/baseline_setcover/train_params.pkl
+models/baseline_setcover/train_log.txt
+```
+
+Retraining is not required for this runner.
+
+## Layout
+
+```text
+configs/                    Experiment config
+models/baseline_setcover/   Fixed trained policy
+scripts/                    Generation, evaluation, plotting, summaries
+src/branching_eval/         Learned branching evaluation code
+src/milp_distance/          Maudet-Danoy-style distance code
+data/                       Generated instances, ignored by Git
+results/                    Generated outputs, ignored by Git
+```
